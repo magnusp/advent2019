@@ -1,10 +1,6 @@
 from dec2 import SantaVM
 import pytest
 
-expectations = [
-    ("1,0,0,0,99", "2,0,0,0,99")
-]
-
 
 @pytest.mark.parametrize(
     'input, expectation',
@@ -16,6 +12,14 @@ expectations = [
     ]
 )
 def test_expectations(input, expectation):
+    vm = SantaVM(input)
+    vm.run()
+    assert expectation == vm.core_dump()
+
+
+def test_off_by_one():
+    input = "2,4,4,5,99,0"
+    expectation = "2,4,4,5,99,9801"
     vm = SantaVM(input)
     vm.run()
     assert expectation == vm.core_dump()
