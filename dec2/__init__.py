@@ -1,17 +1,8 @@
-import itertools
-from typing import List
-
-
-def chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
-    for i in range(0, len(lst), n):
-        yield lst[i:i + n]
-
-
 class SantaVM:
     def __init__(self, punchcard: str) -> None:
         super().__init__()
         self.core = [int(code) for code in punchcard.split(",")]
+        self.backup = self.core[:]
 
     def execute(self, input1: int = None, input2: int = None):
         if input1 is not None:
@@ -40,6 +31,9 @@ class SantaVM:
             except ValueError:
                 if self.core[instruction_pointer] is 99:
                     break
+
+    def result(self):
+        return self.core[0]
 
     def core_dump(self):
         return ",".join([str(intcode) for intcode in self.core])
