@@ -1,4 +1,5 @@
-import math
+from functools import reduce
+from typing import Set
 
 
 def extents(input):
@@ -61,16 +62,16 @@ def setrogify_wiring(directions):
         direction, distance = [movement[0], int(movement[1:])]
         line = ()
         if direction is 'U':
-            line = [(bug_x, q) for q in range(bug_y, bug_y+distance+1)]
+            line = [(bug_x, q) for q in range(bug_y, bug_y + distance + 1)]
             bug_y = bug_y + distance
         elif direction is 'D':
-            line = [(bug_x, q) for q in range(bug_y, bug_y-distance-1, -1)]
+            line = [(bug_x, q) for q in range(bug_y, bug_y - distance - 1, -1)]
             bug_y = bug_y - distance
         elif direction is 'L':
-            line = [(q, bug_y) for q in range(bug_x, bug_x-distance-1, -1)]
+            line = [(q, bug_y) for q in range(bug_x, bug_x - distance - 1, -1)]
             bug_x = bug_x - distance
         elif direction is 'R':
-            line = [(q, bug_y) for q in range(bug_x, bug_x+distance+1)]
+            line = [(q, bug_y) for q in range(bug_x, bug_x + distance + 1)]
             bug_x = bug_x + distance
         else:
             raise RuntimeError(f"Bug cant move that way: {direction}")
@@ -78,3 +79,12 @@ def setrogify_wiring(directions):
         bug = (bug_x, bug_y)
 
     return wiring
+
+
+def solve_for_santa(intersection: Set) -> int:
+    def keyFunction(element):
+        return abs(element[0]) + abs(element[1])
+
+    smaller_set = intersection.difference({(0, 0)})
+    gingerbread_location = min(smaller_set, key=keyFunction)
+    return keyFunction(gingerbread_location)

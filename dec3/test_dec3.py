@@ -1,8 +1,5 @@
-import unittest
-
 import pytest
 import dec3
-from dec3 import extents, max_grid, dimension, bug_offset
 
 
 @pytest.mark.parametrize(
@@ -27,11 +24,29 @@ from dec3 import extents, max_grid, dimension, bug_offset
 def test_transmogrification(test, expectation):
     assert dec3.setrogify_wiring(test) == expectation
 
+
 @pytest.mark.parametrize(
     'test, expectation',
     [
         (["U2", "D2"], {(0, 0)}),
+        (["U2", "U2"], {(0, 0), (0, 1), (0, 2)}),
+        (["U2", "R1,U2,L1"], {(0, 0), (0, 2)}),
     ]
 )
 def test_xrayed(test, expectation):
-    pytest.fail("derp")
+    wiring1, wiring2 = test
+    layout1 = dec3.setrogify_wiring(wiring1)
+    layout2 = dec3.setrogify_wiring(wiring2)
+    intersection = layout1.intersection(layout2)
+    assert intersection == expectation
+
+@pytest.mark.parametrize(
+    'test, expectation',
+    [
+        ({(0, 0), (0, 1)}, 1),
+        ({(0, 0), (0, 1), (0, 2)}, 1),
+        ({(0, 0), (0, 2)}, 2),
+    ]
+)
+def test_santas_solver_works(test, expectation):
+    assert dec3.solve_for_santa(test) == expectation
