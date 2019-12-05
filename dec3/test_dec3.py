@@ -1,89 +1,37 @@
 import unittest
 
 import pytest
-
+import dec3
 from dec3 import extents, max_grid, dimension, bug_offset
 
 
 @pytest.mark.parametrize(
     'test, expectation',
     [
-        ("U10", [(0, 10), (0, 0)]),
-        ("U10,D10", [(0, 10), (0, 0)]),
-        ("U10,D20", [(0, 10), (0, -10)]),
-        ("U10,D20,R5", [(5, 10), (0, -10)]),
-        ("U10,D20,L5", [(0, 10), (-5, -10)]),
+        ("U2", {(0, 0), (0, 1), (0, 2)}),
+        ("D2", {(0, 0), (0, -1), (0, -2)}),
+        ("L2", {(0, 0), (-1, 0), (-2, 0)}),
+        ("R2", {(0, 0), (1, 0), (2, 0)}),
+        ("U2,D2", {(0, 0), (0, 1), (0, 2)}),
+        ("D2,U2", {(0, 0), (0, -1), (0, -2)}),
+        ("R2,L2", {(0, 0), (1, 0), (2, 0)}),
+        ("L2,R2", {(0, 0), (-1, 0), (-2, 0)}),
+        ("U10,D10", {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (0, 5), (0, 6), (0, 7), (0, 8), (0, 9), (0, 10)}),
+        ("L2,R2,U2", {(0, 0), (-1, 0), (-2, 0), (0, 1), (0, 2)}),
+        ("L2,R2,U2,D2", {(0, 0), (-1, 0), (-2, 0), (0, 1), (0, 2)}),
+        ("L2,R2,D2,U2", {(0, 0), (-1, 0), (-2, 0), (0, -1), (0, -2)}),
+        ("L0", {(0, 0)}),
+        ("L1,R0", {(0, 0), (-1, 0)}),
     ]
 )
-def test_extents(test, expectation):
-    size = extents(test)
-    assert size == expectation
-
+def test_transmogrification(test, expectation):
+    assert dec3.setrogify_wiring(test) == expectation
 
 @pytest.mark.parametrize(
     'test, expectation',
     [
-        (
-                [
-                    [(0, 0), (0, 0)],
-                    [(0, 0), (0, 0)]
-                ],
-                [(0, 0), (0, 0)]
-        ),
-        (
-                [
-                    [(0, 10), (0, 0)],
-                    [(0, 0), (0, 0)]
-                ],
-                [(0, 10), (0, 0)]
-        ),
-        (
-                [
-                    [(15, 1), (1, 1)],
-                    [(25, 1), (1, 1)]
-                ],
-                [(25, 1), (1, 1)]
-        ),
-        (
-                [
-                    [(15, 1), (1, 1)],
-                    [(25, 10), (1, 1)]
-                ],
-                [(25, 10), (1, 1)]
-        ),
-        (
-                [
-                    [(15, 1), (1, 1)],
-                    [(25, -10), (1, 1)]
-                ],
-                [(25, -10), (1, 1)]
-        )
+        (["U2", "D2"], {(0, 0)}),
     ]
 )
-def test_max_grid(test, expectation):
-    layout1, layout2 = test
-    assert max_grid(layout1, layout2) == expectation
-
-
-@pytest.mark.parametrize(
-    'test, expectation',
-    [
-        ([(0, 10), (0, 0)], [10, 0]),
-        ([(0, 5), (0, 0)], [5, 0]),
-        ([(5, 5), (0, 0)], [5, 5]),
-        ([(5, 5), (0, -5)], [10, 5]),
-        ([(15, 5), (-5, -5)], [10, 20]),
-    ]
-)
-def test_dimension(test, expectation):
-    assert dimension(test) == expectation
-
-
-@pytest.mark.parametrize(
-    'test, expectation',
-    [
-        ([(9284, 7720), (-4662, -4556)], [4662, 4556]),
-    ]
-)
-def test_bug_offset(test, expectation):
-    assert bug_offset(test) == expectation
+def test_xrayed(test, expectation):
+    pytest.fail("derp")

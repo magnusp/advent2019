@@ -51,3 +51,30 @@ def dimension(grid):
 def bug_offset(grid):
     _, minRange = grid
     return [abs(minRange[0]), abs(minRange[1])]
+
+
+def setrogify_wiring(directions):
+    wiring = {(0, 0)}
+    bug = (0, 0)
+    for movement in directions.split(','):
+        bug_x, bug_y = bug
+        direction, distance = [movement[0], int(movement[1:])]
+        line = ()
+        if direction is 'U':
+            line = [(bug_x, q) for q in range(bug_y, bug_y+distance+1)]
+            bug_y = bug_y + distance
+        elif direction is 'D':
+            line = [(bug_x, q) for q in range(bug_y, bug_y-distance-1, -1)]
+            bug_y = bug_y - distance
+        elif direction is 'L':
+            line = [(q, bug_y) for q in range(bug_x, bug_x-distance-1, -1)]
+            bug_x = bug_x - distance
+        elif direction is 'R':
+            line = [(q, bug_y) for q in range(bug_x, bug_x+distance+1)]
+            bug_x = bug_x + distance
+        else:
+            raise RuntimeError(f"Bug cant move that way: {direction}")
+        wiring = wiring.union(line)
+        bug = (bug_x, bug_y)
+
+    return wiring
