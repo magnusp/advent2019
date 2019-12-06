@@ -48,3 +48,38 @@ def solve_for_santa(intersection: Set) -> int:
     smaller_set = intersection.difference({(0, 0)})
     gingerbread_location = min(smaller_set, key=keyFunction)
     return keyFunction(gingerbread_location)
+
+
+def make_vector_ranges(wiring):
+    zero_cycle = itertools.cycle([0])
+    positive_cycle = itertools.cycle([1])
+    negative_cycle = itertools.cycle([-1])
+
+    def make_vector(item):
+        direction, distance = (item[0], int(item[1:]))
+        if direction is 'U':
+            change = (zero_cycle, positive_cycle)
+        elif direction is 'D':
+            change = (zero_cycle, negative_cycle)
+        elif direction is 'L':
+            change = (negative_cycle, zero_cycle)
+        elif direction is 'R':
+            change = (positive_cycle, zero_cycle)
+        else:
+            raise ValueError
+
+        return itertools.islice(itertools.cycle(change), 0, distance)
+
+    return [make_vector(x) for x in wiring.split(',')]
+
+def build(layout):
+    d = {}
+    bug = (0, 0)
+    for instruction in layout:
+        bug_x, bug_y = bug
+        flurp = list(instruction)
+        i = 0
+
+
+def solve_for_santa_but_better(wiring1, wiring2):
+    pass
