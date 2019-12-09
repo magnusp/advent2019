@@ -1,5 +1,4 @@
 import pytest
-
 import dec4
 
 
@@ -13,7 +12,7 @@ import dec4
         (135679, False)
     ]
 )
-def test_santa_the_ripper_matcher(test, expectation):
+def test_is_valid_matcher(test, expectation):
     assert dec4.is_valid(test) == expectation
 
 @pytest.mark.parametrize(
@@ -25,4 +24,19 @@ def test_santa_the_ripper_matcher(test, expectation):
 )
 def test_range_makes_sense(test, expectation):
     start, stop = test
-    assert dec4.santa_ripper(start, stop) == expectation
+    assert dec4.santa_ripper(start, stop, dec4.is_valid) == expectation
+
+@pytest.mark.parametrize(
+    'test, expectation',
+    [
+        (111111, False),
+        (223450, False),
+        (123789, False),
+        (112233, True),
+        (123444, False),
+        (111122, True),
+        (699999, False),
+    ]
+)
+def test_is_valid_extended(test, expectation):
+    assert dec4.is_valid_extended(test) == expectation
